@@ -21,6 +21,9 @@ export const getCountriesPagination = async (page, limit, search) => {
           {
             Name: { [Op.like]: `%${search}%` },
           },
+          {
+            Code: { [Op.like]: `%${search}%` },
+          },
         ],
       },
     }),
@@ -32,6 +35,9 @@ export const getCountriesPagination = async (page, limit, search) => {
           },
           {
             Name: { [Op.like]: `%${search}%` },
+          },
+          {
+            Code: { [Op.like]: `%${search}%` },
           },
         ],
       },
