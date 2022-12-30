@@ -1,22 +1,28 @@
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import useSWR from 'swr';
 import { buildUrl, fetcher } from '../../../services/countries.service';
+import { useCountryContext } from '../CountryProvider';
 import styles from './CountriesWithSwr.module.css';
+import CountriesWithSwrTable from './CountriesWithSwrTable/CountriesWithSwrTable';
+import Pagination from './Pagination/Pagination';
 
 const CountriesWithSwr = () => {
-  const [page, setPage] = useState(0);
-
+  const { page, setPage } = useCountryContext();
   const [search, setSearch] = useState('');
-
-  const { data, mutate } = useSWR(buildUrl(page, search), fetcher);
+  const { data } = useSWR(buildUrl(page, search), fetcher);
+  console.log(data);
 
   const handleNext = () => {
-    if (data.page === data.totalPages) return;
-    mutate({ ...data, page: data.page + 1 });
+    if (page === data?.totalPages) return;
+    setPage(prev => prev + 1);
   };
   const handlePrev = () => {
-    if (data.page === 0) return;
-    mutate({ ...data, page: data.page - 1 });
+    if (page === 0) return;
+    setPage(prev => prev - 1);
+  };
+  const handleSearch = e => {
+    setSearch(e.target.value);
+    setPage(0);
   };
 
   return (
@@ -28,46 +34,22 @@ const CountriesWithSwr = () => {
           type='text'
           placeholder='Search...'
           value={search}
-          onChange={e => setSearch(e.target.value)}
+          onChange={handleSearch}
         />
         <div className={styles.filter}>
-          {data?.page > 0 && <button onClick={handlePrev}>Prev</button>}
+          {page > 0 && <button onClick={handlePrev}>Prev</button>}
 
-          {data?.page < data?.totalPages - 1 && (
+          {page < data?.totalPages - 1 && (
             <button onClick={handleNext}>Next</button>
           )}
         </div>
-        <div> Page: {data?.page + 1}</div>
+        <div> Page: {page + 1}</div>
         <div> Total Pages: {data?.totalPages}</div>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Code</th>
-              <th>Name</th>
-              <th>Continent</th>
-            </tr>
-          </thead>
-          <tbody>
-            {!!data?.result &&
-              data?.result.map((country, index) => {
-                return (
-                  <Fragment key={index}>
-                    <tr>
-                      <td>{country.Code2}</td>
-                      <td>{country.Name}</td>
-                      <td>{country.Continent}</td>
-                    </tr>
-                  </Fragment>
-                );
-              })}
-          </tbody>
-        </table>
+        <Pagination totalPages={data?.totalPages} />
+        {!!data?.result && <CountriesWithSwrTable data={data} />}
+        <Pagination totalPages={data?.totalPages} />
       </div>
     </div>
-    // <>
-    //   <h2>Countries</h2>
-    //   {JSON.stringify(data?.result)}
-    // </>
   );
 };
 

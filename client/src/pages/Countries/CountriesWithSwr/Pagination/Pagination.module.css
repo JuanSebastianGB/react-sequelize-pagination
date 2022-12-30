@@ -1,0 +1,39 @@
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.pagination > * {
+  list-style: none;
+}
+
+.pagination > *:hover {
+  cursor: pointer;
+  background-color: rgb(85, 70, 25);
+}
+
+.pagination > *:active {
+  background-color: rgb(85, 70, 25);
+}
+
+.prev,
+.next {
+  padding: 0.5rem;
+  background-color: rgb(59, 58, 55);
+  color: aliceblue;
+  border-radius: 0.5rem;
+}
+
+.page {
+  background-color: rgb(59, 58, 55);
+  color: rgb(214, 219, 223);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+.active {
+  background-color: rgb(85, 70, 25);
+  color: aliceblue;
+}

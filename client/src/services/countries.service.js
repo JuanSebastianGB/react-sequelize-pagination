@@ -4,10 +4,10 @@ const fetchCountries = async (page, search) => {
   return result;
 };
 
-const fetcher = (...args) => fetch(...args).then(res => res.json());
+const fetcher = url => fetch(url).then(res => res.json());
 
 const buildUrl = (page, search) =>
-  `http://localhost:5000/countries?page=${page}&&search=${search}`;
+  `http://localhost:5000/countries?page=${page}&search=${search}`;
 // `http://localhost:5000/countries`;
 
 export { fetchCountries, fetcher, buildUrl };
